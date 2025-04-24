@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чек-лист безопасности в путешествиях - TravelSafe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ff7b00;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff7b00;
+            margin-bottom: 5px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: #ff7b00;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: #333;
+        }
+        
+        ul {
+            padding-left: 20px;
+            list-style-type: none;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 5px 0;
+        }
+        
+        .checklist-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .checkbox {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            display: inline-block;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff7b00;
+            font-weight: bold;
+        }
+        
+        .item-text {
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+        
+        .completed .item-text {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .print-button {
+            background-color: #ff7b00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            display: block;
+            margin: 30px auto;
+        }
+        
+        .print-button:hover {
+            background-color: #e66e00;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #ff7b00;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+            }
+            
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .checkbox.checked::after {
+                color: black;
+            }
+            
+            .completed .item-text {
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">TravelSafe</div>
+            <h1>ЧЕК-ЛИСТ БЕЗОПАСНОСТИ В ПУТЕШЕСТВИЯХ</h1>
+            <p>Ваш надежный помощник для безопасных поездок</p>
+            
+            <div class="progress-container no-print">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-text no-print" id="progress-text">Выполнено: 0%</div>
+        </div>
+        
+        <h2>1. ДО ПОЕЗДКИ</h2>
+        
+        <h3>Проверка документов:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Загранпаспорт (срок действия минимум 6 месяцев после окончания поездки)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Виза (если требуется)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Медицинская страховка (действительна в стране назначения, покрывает экстренные случаи, включая госпитализацию)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Копии всех документов (загранпаспорта, визы, страхового полиса). Храните их в электронном виде (например, в облачном хранилище или на почте) и распечатайте одну копию</div>
+            </li>
+        </ul>
+        
+        <h3>Медицинская подготовка:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Прививки (проверьте требования страны назначения)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Медицинские справки (например, подтверждение хронических заболеваний, рецепты на лекарства)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Аптечка первой помощи (базовые медикаменты: обезболивающее, антигистаминное, перевязочные материалы, антисептики)</div>
+            </li>
+        </ul>
+        
+        <h3>Бронирования и маршруты:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Подтвердите бронирование отеля/жилья</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Распечатайте или сохраните билеты (авиа, ж/д, автобусные)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Изучите карту города/страны и основные маршруты передвижения</div>
+            </li>
+        </ul>
+        
+        <h3>Финансовая подготовка:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Убедитесь, что карта работает за границей (активируйте международные платежи)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Имейте наличные деньги в местной валюте (для первых дней)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Разделите деньги (часть в кошельке, часть в тайнике, часть на карте)</div>
+            </li>
+        </ul>
+        
+        <h3>Личная безопасность:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Сообщите родственникам или друзьям маршрут и контакты</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Загрузите приложения для безопасности (например, Find My Friends, TripWhistle SOS, Trustpilot)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Проверьте наличие зарядных устройств и повербанка</div>
+            </li>
+        </ul>
+        
+        <h2>2. В ПУТЕШЕСТВИИ</h2>
+        
+        <h3>Общие правила безопасности:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Не носите с собой крупные суммы денег и ценные вещи на виду</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Используйте антикражные сумки или скрытые карманы</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Будьте внимательны к окружающим и избегайте темных/пустынных районов</div>
+            </li>
+        </ul>
+        
+        <h3>Документы и финансы:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Носите документы в защищенном месте (внутренний карман или специальный пояс)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Оставьте копии документов в гостинице или у доверенного лица</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Регулярно проверяйте баланс банковской карты</div>
+            </li>
+        </ul>
+        
+        <h3>Передвижение:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Используйте только официальные такси или проверенные сервисы (Uber, Bolt)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Перед поездкой узнайте, какие районы считаются небезопасными</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">В общественном транспорте держите вещи под контролем</div>
+            </li>
+        </ul>
+        
+        <h3>Жилье:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Проверьте замки и окна в номере</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Не сообщайте незнакомым людям, где вы живете</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Используйте сейф для хранения ценных вещей</div>
+            </li>
+        </ul>
+        
+        <h3>Здоровье:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Пейте только бутилированную воду</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Избегайте уличной еды в непроверенных местах</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">В случае недомогания сразу обращайтесь в медицинское учреждение</div>
+            </li>
+        </ul>
+        
+        <h3>Контакты:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Сохраните номера экстренных служб страны (полиция, скорая помощь, пожарная служба)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Сохраните контакт посольства/консульства своей страны</div>
+            </li>
+        </ul>
+        
+        <h2>3. ЧРЕЗВЫЧАЙНЫЕ СИТУАЦИИ</h2>
+        
+        <h3>Потеря документов:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Обратитесь в полицию для получения справки</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Свяжитесь с консульством для восстановления документов</div>
+            </li>
+        </ul>
+        
+        <h3>Кража или потеря денег:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Заблокируйте банковскую карту через мобильное приложение</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Обратитесь в банк для перевыпуска карты</div>
+            </li>
+        </ul>
+        
+        <h3>Медицинские проблемы:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Обратитесь в больницу или клинику</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Используйте медицинскую страховку для покрытия расходов</div>
+            </li>
+        </ul>
+        
+        <h3>Эвакуация:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Следите за новостями и рекомендациями своего посольства</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Будьте готовы покинуть страну в случае форс-мажора</div>
+            </li>
+        </ul>
+        
+        <h2>4. ПОСЛЕ ПОЕЗДКИ</h2>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Проверьте, что все документы и вещи на месте</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Отправьте отзывы о своем опыте (например, на сайтах бронирования или форумах)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Поделитесь советами с друзьями или в социальных сетях</div>
+            </li>
+        </ul>
+        
+        <h2>ДОПОЛНИТЕЛЬНЫЕ СОВЕТЫ</h2>
+        
+        <h3>Технологии:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Используйте приложения для отслеживания маршрутов (Google Maps, Maps.me)</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Включите функцию "Найти мой iPhone" или аналогичные сервисы</div>
+            </li>
+        </ul>
+        
+        <h3>Культурные особенности:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Изучите обычаи и традиции страны, чтобы не нарушать местные нормы</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Узнайте базовые фразы на языке страны назначения</div>
+            </li>
+        </ul>
+        
+        <h3>Связь:</h3>
+        <ul>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Купите местную SIM-карту или активируйте роуминг</div>
+            </li>
+            <li class="checklist-item">
+                <div class="checkbox" onclick="toggleCheckbox(this)"></div>
+                <div class="item-text">Имейте доступ к Wi-Fi хотя бы в одном месте (например, в отеле)</div>
+            </li>
+        </ul>
+        
+        <div class="footer">
+            <p>© TravelSafe - Безопасность в путешествиях. Распечатайте и используйте этот чек-лист перед каждой поездкой.</p>
+            <p>Посетите наш сайт для получения дополнительной информации: <a href="https://travelsafe.ru">travelsafe.ru</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Функция для переключения состояния чекбокса
+        function toggleCheckbox(element) {
+            element.classList.toggle('checked');
+            element.parentNode.classList.toggle('completed');
+            
+            // Сохраняем состояние в localStorage
+            saveCheckboxState();
+            
+            // Обновляем прогресс-бар
+            updateProgress();
+        }
+        
+        // Функция для сохранения состояния чекбоксов
+        function saveCheckboxState() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const states = Array.from(checkboxes).map(checkbox => checkbox.classList.contains('checked'));
+            localStorage.setItem('checklistStates', JSON.stringify(states));
+        }
+        
+        // Функция для загрузки состояния чекбоксов
+        function loadCheckboxState() {
+            const savedStates = localStorage.getItem('checklistStates');
+            if (savedStates) {
+                const states = JSON.parse(savedStates);
+                const checkboxes = document.querySelectorAll('.checkbox');
+                
+                checkboxes.forEach((checkbox, index) => {
+                    if (states[index]) {
+                        checkbox.classList.add('checked');
+                        checkbox.parentNode.classList.add('completed');
+                    }
+                });
+                
+                // Обновляем прогресс-бар
+                updateProgress();
+            }
+        }
+        
+        // Функция для обновления прогресс-бара
+        function updateProgress() {
+            const totalItems = document.querySelectorAll('.checklist-item').length;
+            const completedItems = document.querySelectorAll('.checklist-item.completed').length;
+            const progressPercentage = Math.round((completedItems / totalItems) * 100);
+            
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            progressBar.style.width = progressPercentage + '%';
+            progressText.textContent = `Выполнено: ${progressPercentage}%`;
+        }
+        
+        // Загружаем состояние при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadCheckboxState);
+    </script>
+</body>
+</html> 
